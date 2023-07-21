@@ -11,7 +11,7 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authenticated = useSelector(store=>store.AuthReducer.isAuth);
-  const token = useSelector(store=>store.AuthReducer.token)
+  const token = useSelector(store=>store.AuthReducer.token);
 
   const handleLogin = (event) => {
     setload(true)
@@ -20,19 +20,22 @@ function Login() {
     if (email !== "" && password !== "") {
            
       dispatch(loginUser(obj)).then(r=>{
-         console.log(r)
         if(localStorage.getItem("token")){
+          localStorage.setItem('user',JSON.stringify(r.payload.user))
           setload(false)
-          
+          alert('logged in')
+          navigate('/')
         }else
         if(r.payload.msg) {
           localStorage.setItem('token',r.payload.token)
           setload(false)
+          alert('logged in')
           navigate('/')
           
           } else {
             setload(false)
-            console.log(r.payload)
+            alert('login failed')
+            console.log('failed',r.payload)
               
           }
       })

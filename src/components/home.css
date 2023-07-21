@@ -1,0 +1,12 @@
+
+.total{
+    display: flex;
+    justify-content: space-between;
+    gap:20px;
+    padding:30px
+}
+.dash{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap:20px
+}

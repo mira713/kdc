@@ -1,11 +1,9 @@
-import "./validation.css";
+import "./register.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { postUser ,AllUsers} from '../redux/auth/auth.action';
-//import { baseUrl } from '../Utils/backendUrl'
-// import Loading from "../../Components/CartProductCard/Loading";
 
 const initialState = {
     firstName: "",
@@ -13,6 +11,8 @@ const initialState = {
     email: "",
     phone: "",
     password: "",
+    location:"",
+    username:""
 };
 
 const ValidationForm = () => {
@@ -31,11 +31,14 @@ const ValidationForm = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
+        console.log(fields)
        setload(true)
         let name = fields.firstName + " " + fields.lastName;
         let number = fields.phone;
         let email = fields.email;
         let password = fields.password;
+        let location = fields.location;
+        let username = fields.username;
 
         if (password.length <= 5) {
             
@@ -46,11 +49,11 @@ const ValidationForm = () => {
             fields.lastName == "" ||
             fields.email == "" ||
             fields.phone == "" ||
-            fields.password == ""
+            fields.password == ""||fields.location==""||fields.username==""
         ) {
             return alert('fill out all the neccessary fields')
         } else {
-            let obj = { name, number, email, password }
+            let obj = { name, number, email, password , location, username}
             dispatch(postUser(obj)).then(r=>{
                 if (r.payload.email) {
                     setload(false)
@@ -107,6 +110,19 @@ const ValidationForm = () => {
                         />
                     </label>
                 </p>
+                <p className="title_validation">
+                    <label>
+                        UserName
+                        <br />
+                        <input
+                            className="validation_input"
+                            type="text"
+                            name="username"
+                            value={fields.username}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </p>
 
                 {/* Email Address */}
                 <p className="title_validation">
@@ -137,6 +153,19 @@ const ValidationForm = () => {
                         />
                     </label>
                 </p>
+                <p className="title_validation">
+                    <label>
+                        * Location
+                        <br />
+                        <input
+                            className="validation_input"
+                            type="text"
+                            name="location"
+                            value={fields.location}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </p>
 
                 {/* Password */}
                 <p className="title_validation">
@@ -154,26 +183,6 @@ const ValidationForm = () => {
                     <br />
                     <p mt="5px" color="red" display={fields.password.length <= 5 ? "flex" : "none"} > Password must be 6 Letters</p>
                 </p>
-
-                {/* Confirm password */}
-                {/* <p className="title_validation">
-          <label>
-            * Confirm Password
-            <br />
-            <input
-              className="validation_input"
-              type="password"
-              name="confirm_password"
-              onBlur={form.handleBlurEvent}
-              onChange={form.handleChangeEvent}
-              value={fields.confirm_password}
-            />
-          </label>
-          <br />
-          <label className="error">
-            {errors.confirm_password ? errors.confirm_password : ""}
-          </label>
-        </p> */}
 
                 <p>
                     <button className="signup_continue" type="submit">
