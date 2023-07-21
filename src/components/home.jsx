@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import './home.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { AllUser } from "../redux/auth/auth.action"
+import { AllUser } from "../redux/auth/auth.action";
+import {addPost,updatePost,deletePost,getPost} from "../redux/post/post.action"
 
 export default function Home() {
     let user = JSON.parse(localStorage.getItem('user'))
     let data = useSelector(store => store.AuthReducer.data);
+    let [msg, setMsg] = useState('')
     let dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(AllUser())
     }, [])
+
+    let AddPost = () => {
+        let title="title blank";
+        let likes = 0;
+        let dislikes = 0;
+        let obj={msg, title,likes,dislikes}
+        console.log(obj)
+     dispatch(addPost(obj))
+    }
     console.log(user)
     return (
         <>
@@ -40,7 +51,14 @@ export default function Home() {
                     <button>edit detail</button>
                 </div>
                 <div className="dashboard">
-                    
+                    <div className="addPost">
+                    <input placeholder="write your msg" value={msg} onChange={(e)=>setMsg(e.target.value)}/>
+                    <button onClick={AddPost}>add</button>
+                    </div>
+                    <hr/>
+                    <div className="showPost">
+                       
+                    </div>
                 </div>
             </div>
         </>
