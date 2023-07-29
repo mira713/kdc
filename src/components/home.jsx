@@ -1,63 +1,131 @@
 import React, { useEffect, useState } from "react";
 import './home.css';
+import './modal.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { AllUser } from "../redux/auth/auth.action";
-import {addPost,updatePost,deletePost,getPost} from "../redux/post/post.action"
+import { addPost, updatePost, deletePost, getPost } from "../redux/post/post.action";
+import { updateAuth } from "../redux/auth/auth.action"
+import Modal from "./modal";
+import User from "./user";
+import Search from "./search"
 
 export default function Home() {
-    let user = JSON.parse(localStorage.getItem('user'))
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    let using = useSelector(store => store.AuthReducer.user)
+    let user = JSON.parse(localStorage.getItem('user')) || using
     let data = useSelector(store => store.AuthReducer.data);
-    let [msg, setMsg] = useState('')
+    let posts = useSelector(store => store.PostReducer.data)
+    let [post, setPost] = useState({ msg: "", title: "" });
+    let [item, setItem] = useState('')
     let dispatch = useDispatch()
+    // console.log(posts)
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
 
+    const closeModal = () => {
+        setIsModalOpen(false);
+
+    };
+    const handleSubmit = (event) => {
+
+        event.preventDefault();
+        if (item === "") {
+            let obj = post;
+            obj.likes = 0;
+            obj.dislikes = 0;
+            if (obj.msg !== "" && obj.title !== "") {
+                dispatch(addPost(obj))
+                window.location.reload()
+            }
+        } else {
+            let obj = {};
+            obj.title = post.title || item.title;
+            obj.msg = post.msg || item.msg;
+            obj.likes = item.likes;
+            obj.dislikes = item.dislikes;
+            obj.id = item._id;
+            // console.log(obj)
+            dispatch(updatePost(obj))
+            window.location.reload()
+        }
+        closeModal();
+    };
+
+    let handleChange = (e) => {
+        const { name, value } = e.target;
+        setPost({
+            ...post, [name]: value
+        })
+    }
+
+    let updateDetail = (item) => {
+        setItem(item)
+        setIsModalOpen(true);
+
+    }
+    let updateFolower = (item) => {
+        console.log(item.follow)
+      dispatch(updateAuth(item))
+  }
     useEffect(() => {
         dispatch(AllUser())
+        dispatch(getPost())
     }, [])
 
-    let AddPost = () => {
-        let title="title blank";
-        let likes = 0;
-        let dislikes = 0;
-        let obj={msg, title,likes,dislikes}
-        console.log(obj)
-     dispatch(addPost(obj))
-    }
-    console.log(user)
     return (
         <>
-            <input />
+            <Search />
             <hr />
+            { /* All user details */}
             <div>
-                {data[0] ? <div className="dash">
-                    {data.map((el) => {
-                        return (
-                            <div key={el._id}>
-                                <p>name : {el.name}</p>
-                                <p>email : {el.email}</p>
-                                <button>follow</button>
-                                <br />
-                            </div>
-                        )
-                    })}
-                </div> : ""}
+                {data[0] ?<div className="dash">
+                                    {data?.map((el) => {
+                                        return (
+                                            <div key={el._id} className="usersDetail">
+                                                <p>name : {el.name}</p>
+                                                <p>email : {el.email}</p>
+                                                <p>followers : {el.follow}</p>
+                                                <button onClick={()=>updateFolower(el)}>follow</button>
+                                                <br />
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                    : ""}
             </div>
+            {/* single user detail */}
             <div className="total">
-                <div className="detail">
-                    <h2>{user.username}</h2>
-                    <h6>name : {user.name}</h6>
-                    <h6>email : {user.email}</h6>
-                    <h6>place : {user.location}</h6>
-                    <h6>number : {user.number}</h6>
-                    <button>edit detail</button>
-                </div>
+                <User user={user} />
+                {/* show all posts here */}
                 <div className="dashboard">
                     <div className="addPost">
-                    <input placeholder="write your msg" value={msg} onChange={(e)=>setMsg(e.target.value)}/>
-                    <button onClick={AddPost}>add</button>
+                        <button onClick={openModal}>Create Post</button>
+                        {isModalOpen &&
+                            <Modal closeModal={closeModal} handleSubmit={handleSubmit} handleChange={handleChange} />
+                        }
                     </div>
-                    <hr/>
+                    <hr />
                     <div className="showPost">
-                       
+                        {posts[0]? <div className="postsField">
+                            {posts.map((el, i) => {
+                                return (
+                                    <div className="postsCard" key={i}>
+                                        <h4>{user.username}</h4>
+                                        <p>{el.title}</p>
+                                        <p>{el.msg}</p>
+                                        <div className="editDelete">
+                                            <button onClick={() => updateDetail(el)}>edit detail</button>
+
+                                            <button onClick={() => { dispatch(deletePost(el._id)); window.location.reload() }}>delete post</button>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>:
+                        <img src="https://fptraffic.com/wp-content/uploads/2020/04/Create-Post-Schedule.png" alt="data not exist" style={{width:"80%"}}/>
+                        // <img src="https://www.babyday.in/static/media/cart-empty.27846abe.gif"/>
+                        }
                     </div>
                 </div>
             </div>

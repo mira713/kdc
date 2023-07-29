@@ -1,6 +1,6 @@
 import {GET_FAIL_LOGIN,GET_USER_FAILURE,GET_USER_LOGIN,GET_USER_REQUEST,GET_USER_SUCCESS} from "./auth.type";
 import axios from 'axios';
-const url = 'https://red-exuberant-chicken.cyclic.app';
+const url = 'https://fair-plum-trout-coat.cyclic.app';
 
 export const AllUser = () =>(dispatch)=>{
     dispatch({type:GET_USER_REQUEST});
@@ -18,4 +18,24 @@ export const loginUser=(cred)=>(dispatch)=>{
     }catch(e){
         dispatch({type:GET_FAIL_LOGIN,payload:e.message})
     }
+}
+
+export const updateAuth = (user) => async (dispatch) => {
+    let token = localStorage.getItem('token');
+    dispatch({ type: GET_USER_REQUEST });
+    console.log(user)
+    fetch(`${url}/users/${user._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(user),
+        headers: {
+            'Content-type': 'application/json',
+            'tkn': token
+        }
+    })
+        .then(function (response) {
+            response.json()
+            console.log(response)
+            dispatch({ type: GET_USER_LOGIN,payload:response.data })
+        })
+        .catch((e) => dispatch({ type:GET_FAIL_LOGIN,payload:e.message }))
 }

@@ -5,13 +5,16 @@ import {
     POST_DELETE_SUCCESS,
     POST_UPDATED_SUCCESS,
     POST_GET_SUCCESS,
+    ALLPOST_GET_SUCCESS
   } from "./post.type";
   
   const initialState={
       data : [],
       loading: false,
       count: 0,
-      error:false
+      error:false,
+      allCount : 0,
+      allData : [],
    }
    
    export const PostReducer=(state=initialState,{type, payload})=>{
@@ -20,13 +23,20 @@ import {
            return state
        }
        case POST_GET_SUCCESS:{
-          console.log('reducer',payload)
            return {
                ...state,
                data : payload.da,
                count : payload.c
            }
        }
+
+       case ALLPOST_GET_SUCCESS:{
+         return {
+             ...state,
+             allData : payload.da,
+             allCount : payload.c
+         }
+     }
        case POST_FUNC_ERROR:{
            return {
                ...state,
@@ -43,7 +53,6 @@ import {
        }
   
        case POST_ADD_SUCCESS : {
-          console.log("reducer",payload)
           return {
               ...state,
               data : [...state.data,payload],

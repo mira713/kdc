@@ -5,9 +5,11 @@ POST_FUNC_LOADING,
 POST_DELETE_SUCCESS,
 POST_UPDATED_SUCCESS,
 POST_GET_SUCCESS,
+ALLPOST_GET_SUCCESS
 } from "./post.type";
 import axios from "axios";
-const url = 'https://red-exuberant-chicken.cyclic.app';
+const url = 'https://fair-plum-trout-coat.cyclic.app'
+// const url = "http://localhost:8000"
 
 
 export const getPost = (page=1) => async (dispatch) => {
@@ -30,20 +32,54 @@ export const getPost = (page=1) => async (dispatch) => {
     }
 }
 
-export const addPost = (data) => (dispatch) => {
-    let {title,msg,likes,dislikes} = data
-    let obj = {title,msg,likes,dislikes}
+export const getAllPost = (page=1) => async (dispatch) => {
+    page=page-1
+    let token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            'Content-type': 'application/json',
+            'tkn': token
+        }
+    };
     dispatch({ type: POST_FUNC_LOADING });
-    
+    try{
+        let res =await axios.get(`${url}/post/userPost?page=${page}`,config);
+        let da = res.data.data;
+        let c = res.data.count
+        // console.log('action: ',res.data)
+        dispatch({type:ALLPOST_GET_SUCCESS,payload:{da,c}})
+    }catch(e){
+        dispatch({type:POST_FUNC_ERROR,payload:e.message})
+    }
+}
 
-    return axios.post(`${url}/post/add`,[obj,{headers:{tkn:localStorage.getItem("token")}}])
-    .then(r=>dispatch({type: POST_ADD_SUCCESS, payload:r.data}))
+export const addPost = (data) =>async (dispatch) => {
+    const headers={
+        'Content-type': 'application/json',
+        'tkn' : localStorage.getItem("token")
+    }
+     dispatch({ type: POST_FUNC_LOADING });
+     try {
+        const response = await fetch(`${url}/post/add`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: headers,
+          body: JSON.stringify(data),
+        });
+    console.log('ress',response)
+        const responseData = await response.json();
+        console.log('Response:', responseData);
+         dispatch({type:POST_ADD_SUCCESS,payload:data})
+      } catch (error) {
+        console.error('Error:', error.message);
+      }        
 }
 
 export const updatePost = (product) => async (dispatch) => {
     let token = localStorage.getItem('token');
     dispatch({ type: POST_FUNC_LOADING });
-    fetch(`${url}/post/${product._id}`, {
+    console.log(product.id)
+    fetch(`${url}/post/${product.id}`, {
         method: 'PATCH',
         body: JSON.stringify(product),
         headers: {
@@ -61,7 +97,7 @@ export const updatePost = (product) => async (dispatch) => {
 export const deletePost = (id) => async (dispatch) => {
     let token = localStorage.getItem('token');
     dispatch({ type: POST_FUNC_LOADING });
-    fetch(`${url}/cart/${id}`, {
+    fetch(`${url}/post/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json',

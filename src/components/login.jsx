@@ -31,7 +31,7 @@ function Login() {
           setload(false)
           alert('logged in')
           navigate('/')
-          
+          window.location.reload()
           } else {
             setload(false)
             alert('login failed')

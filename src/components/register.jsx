@@ -39,6 +39,7 @@ const ValidationForm = () => {
         let password = fields.password;
         let location = fields.location;
         let username = fields.username;
+        let follow = 0;
 
         if (password.length <= 5) {
             
@@ -53,7 +54,7 @@ const ValidationForm = () => {
         ) {
             return alert('fill out all the neccessary fields')
         } else {
-            let obj = { name, number, email, password , location, username}
+            let obj = { name, number, email, password , location, username,follow}
             dispatch(postUser(obj)).then(r=>{
                 if (r.payload.email) {
                     setload(false)
@@ -72,9 +73,6 @@ const ValidationForm = () => {
 
     return (
         <div className="validation_form">
-            {/* {Load ? (
-        <Loading />
-      ) : ( */}
             <form
                 className="myForm"
                 noValidate
@@ -190,7 +188,6 @@ const ValidationForm = () => {
                     </button>
                 </p>
             </form>
-            {/* )} */}
         </div>
     );
 };

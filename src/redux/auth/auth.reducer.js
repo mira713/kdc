@@ -21,7 +21,7 @@ export const reducer = (state=initialState,action)=>{
         }
 
         case types.GET_USER_SUCCESS:{
-            console.log('reducer',payload)
+            // console.log('reducer',payload)
             return {
 
                 ...state,isLoading:false, data : payload,isAuth:true
@@ -30,7 +30,7 @@ export const reducer = (state=initialState,action)=>{
 
         case types.GET_USER_LOGIN:{
             setLocal('isAuth',true)
-            // console.log('reducer',payload)
+            localStorage.setItem('user',JSON.stringify(payload.user))
             return {
                 ...state, isLoading:false, isError:false,token: payload.token, isAuth:true, user: payload.user
             }

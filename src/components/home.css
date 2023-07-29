@@ -1,12 +1,130 @@
 
 .total{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     gap:20px;
     padding:30px
 }
 .dash{
     display: grid;
     grid-template-columns: repeat(5,1fr);
+    gap:20px;
+    margin-left: 20px;
+}
+.postsField{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
     gap:20px
 }
+.editDelete{
+    display: flex;
+    justify-content: space-between;
+    /* gap:20px; */
+}
+.postsCard{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding:5px;
+    overflow:hidden;
+}
+.usersDetail{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+}
+.singleUser{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 20px;
+}
+.input{
+   width:50%;
+   margin:4vh auto auto auto;
+   position: relative;
+}
+.navbar{
+    display: flex;
+    justify-content: space-around;
+    height:auto;
+    padding:20px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.page{
+    display: flex;
+    justify-content: space-around;
+    width:20%;
+}
+.nav{
+    font-size: larger;
+    font-weight: bolder;
+}
+#active{
+  color: green;
+  font-weight: bold;
+}
+.page:hover{
+    cursor: pointer;
+}
+.searchContainer{
+    width:50%;
+    margin:auto;
+    display: flex;
+    flex-direction: column;
+}
+.dropdown{
+    background-color: white;
+    display: flex;
+    z-index: 2;
+    flex-direction: column;
+    position:absolute;
+    width:50%;
+    margin:9vh auto auto auto;
+    border: 1px solid grey;
+    padding:0 2%;
+    overflow-y: scroll;
+}
+
+.dropdownEmpty{
+    border:none;
+    position:relative;
+    display:none;
+    visibility: hidden;
+}
+.dropdown-row{
+    cursor: pointer;
+    text-align: start;
+    margin:1px 0;
+}
+.searchInner{
+    display: flex;
+    position: relative;
+}
+.chat{
+    display: flex;
+    justify-content: space-around;
+    color: green;
+}
+.chat:hover{
+    cursor:pointer
+}
+@media screen and (min-width: 250px) {
+    .postsField{
+        grid-template-columns: repeat(2,1fr);
+    }
+    .postsCard{
+        font-size: smaller;
+        width: 70%;
+        gap:20px;
+    }
+   .postsCard button{
+        width:50%
+    }
+  }
+@media screen and (min-width: 400px) {
+    .postsField{
+        grid-template-columns: repeat(3,1fr);
+    }
+  }
+  
+  @media screen and (min-width: 800px) {
+    .postsField{
+        grid-template-columns: repeat(4,1fr);
+    }
+  }
