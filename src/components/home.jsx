@@ -30,14 +30,19 @@ export default function Home() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
+        console.log('111')
         if (item === "") {
-            let obj = post;
+            let obj = {};
+            obj.msg = post.msg;
+            obj.title = post.title;
             obj.likes = 0;
             obj.dislikes = 0;
             if (obj.msg !== "" && obj.title !== "") {
+                console.log(obj)
                 dispatch(addPost(obj))
-                window.location.reload()
+                dispatch(getPost())
             }
+
         } else {
             let obj = {};
             obj.title = post.title || item.title;
@@ -45,10 +50,10 @@ export default function Home() {
             obj.likes = item.likes;
             obj.dislikes = item.dislikes;
             obj.id = item._id;
-            // console.log(obj)
             dispatch(updatePost(obj))
-            window.location.reload()
+            dispatch(getPost())
         }
+        setPost({ msg: "", title: "" })
         closeModal();
     };
 
@@ -117,7 +122,7 @@ export default function Home() {
                                         <div className="editDelete">
                                             <button onClick={() => updateDetail(el)}>edit detail</button>
 
-                                            <button onClick={() => { dispatch(deletePost(el._id)); window.location.reload() }}>delete post</button>
+                                            <button onClick={() => {dispatch(deletePost(el._id)); dispatch(getPost())}}>delete post</button>
                                         </div>
                                     </div>
                                 )

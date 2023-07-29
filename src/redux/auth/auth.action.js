@@ -1,6 +1,6 @@
 import {GET_FAIL_LOGIN,GET_USER_FAILURE,GET_USER_LOGIN,GET_USER_REQUEST,GET_USER_SUCCESS} from "./auth.type";
 import axios from 'axios';
-const url = 'https://fair-plum-trout-coat.cyclic.app';
+const url = 'https://gold-cygnet-slip.cyclic.app';
 
 export const AllUser = () =>(dispatch)=>{
     dispatch({type:GET_USER_REQUEST});

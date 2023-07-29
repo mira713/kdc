@@ -8,8 +8,8 @@ POST_GET_SUCCESS,
 ALLPOST_GET_SUCCESS
 } from "./post.type";
 import axios from "axios";
-const url = 'https://fair-plum-trout-coat.cyclic.app'
-// const url = "http://localhost:8000"
+const url = 'https://gold-cygnet-slip.cyclic.app'
+// const url = "http://localhost:8080"
 
 
 export const getPost = (page=1) => async (dispatch) => {
@@ -59,6 +59,7 @@ export const addPost = (data) =>async (dispatch) => {
         'tkn' : localStorage.getItem("token")
     }
      dispatch({ type: POST_FUNC_LOADING });
+     console.log(1)
      try {
         const response = await fetch(`${url}/post/add`, {
           method: 'POST',
@@ -66,10 +67,12 @@ export const addPost = (data) =>async (dispatch) => {
           headers: headers,
           body: JSON.stringify(data),
         });
+        console.log(2)
     console.log('ress',response)
         const responseData = await response.json();
         console.log('Response:', responseData);
          dispatch({type:POST_ADD_SUCCESS,payload:data})
+         console.log(3)
       } catch (error) {
         console.error('Error:', error.message);
       }        
